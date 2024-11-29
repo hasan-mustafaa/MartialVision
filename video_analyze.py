@@ -14,7 +14,6 @@ def detect_rest_positions(video_file):
         if not success:
             break
         img = detector.findPose(img)
-        cv.imshow("Video", img)
         lmList, bboxinfo = detector.findPosition(img)
         if bboxinfo:
             left_wrist = lmList[15]
