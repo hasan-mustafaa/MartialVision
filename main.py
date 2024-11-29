@@ -9,5 +9,9 @@ while True:
     success, img = cap.read()
     img = detector.findPose(img)
     lmList, bboxinfo = detector.findPosition(img)
+    if bboxinfo:
+        lmString = ''
+        for lm in lmList:
+            print(lm)
     cv.imshow("Image", img)
     cv.waitKey(1)
