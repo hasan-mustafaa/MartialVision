@@ -6,10 +6,8 @@ An AI-powered platform designed to enhance martial arts practice by analyzing an
 
 Key Features
 
-Tutorial Playback
-- Plays segmented videos of martial arts movements for users to follow.
-User Video Capture
-- Records the user's performance of the selected martial arts section.
+Tutorial Playback: Plays segmented videos of martial arts movements for users to follow.
+User Video Capture: Records the user's performance of the selected martial arts section.
 AI-Powered Grading
 - Uses OpenCV to analyze and compare the user's movements with the tutorial.
 - Splices videos into comparable sections for accurate grading.
