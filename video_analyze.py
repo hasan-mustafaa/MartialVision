@@ -24,66 +24,120 @@ while True:
     cv.imshow("Image", img)
     cv.waitKey(1)
 
-restThreshold = 10  # Threshold for detecting rest
-frameDifference = 5  # Number of frames to compare for detecting rest
+restThreshold = 20  # Threshold for detecting rest
+frameDifference = 3  # Number of frames to check for minimal movement (this can be adjusted)
 
-newMovements = []
-rest_positions = []  # To accumulate rest positions
+restPositions = []
 
-# Initialize variables to track resting state
-rest_counter = 0
-rest_sum = [0, 0, 0]  # To accumulate position values during rest
+# Initialize variables to track resting state for each landmark
+rest_sum_wrist_left = [0, 0, 0]  # To accumulate position values during rest for left wrist
+rest_sum_wrist_right = [0, 0, 0]  # For right wrist
+rest_sum_ankle_left = [0, 0, 0]  # For left ankle
+rest_sum_ankle_right = [0, 0, 0]  # For right ankle
+
 rest_count = 0  # To count the number of frames during the rest period
 
+# Loop through the list of movements
 for index in range(frameDifference, len(movements)):
+    # Calculate the differences in positions for each landmark (left wrist, right wrist, left ankle, right ankle)
     difflWrist = []
     diffrWrist = []
     difflAnkle = []
     diffrAnkle = []
 
-    # Calculate the difference in positions
     for v in range(0, 3):
-        difflWrist.append(movements[index][v] - movements[index - frameDifference][v])
-        diffrWrist.append(movements[index][v] - movements[index - frameDifference][v])
-        difflAnkle.append(movements[index][v] - movements[index - frameDifference][v])
-        diffrAnkle.append(movements[index][v] - movements[index - frameDifference][v])
+        difflWrist.append(movements[index][0][v] - movements[index - frameDifference][0][v])
+        diffrWrist.append(movements[index][1][v] - movements[index - frameDifference][1][v])
+        difflAnkle.append(movements[index][2][v] - movements[index - frameDifference][2][v])
+        diffrAnkle.append(movements[index][3][v] - movements[index - frameDifference][3][v])
 
-    # Calculate the distances (Euclidean distance in 3D space)
+    # Calculate the Euclidean distances for each landmark (wrist and ankle)
     distancelWrist = math.sqrt(difflWrist[0] ** 2 + difflWrist[1] ** 2 + difflWrist[2] ** 2)
     distancerWrist = math.sqrt(diffrWrist[0] ** 2 + diffrWrist[1] ** 2 + diffrWrist[2] ** 2)
     distancelAnkle = math.sqrt(difflAnkle[0] ** 2 + difflAnkle[1] ** 2 + difflAnkle[2] ** 2)
     distancerAnkle = math.sqrt(diffrAnkle[0] ** 2 + diffrAnkle[1] ** 2 + diffrAnkle[2] ** 2)
 
-    # Check if the movement is smaller than the threshold (indicating rest)
+    # If the movement is smaller than the threshold (indicating rest), accumulate the positions
     if distancelWrist < restThreshold and distancerWrist < restThreshold and distancelAnkle < restThreshold and distancerAnkle < restThreshold:
-        rest_counter += 1
+        # Accumulate the positions of the landmarks for the rest interval
+        rest_sum_wrist_left[0] += movements[index][0][0]  # Left wrist X
+        rest_sum_wrist_left[1] += movements[index][0][1]  # Left wrist Y
+        rest_sum_wrist_left[2] += movements[index][0][2]  # Left wrist Z
         
-        # Accumulate positions during the resting period
-        rest_sum[0] += movements[index][0]  # Left wrist X
-        rest_sum[1] += movements[index][1]  # Left wrist Y
-        rest_sum[2] += movements[index][2]  # Left wrist Z
+        rest_sum_wrist_right[0] += movements[index][1][0]  # Right wrist X
+        rest_sum_wrist_right[1] += movements[index][1][1]  # Right wrist Y
+        rest_sum_wrist_right[2] += movements[index][1][2]  # Right wrist Z
         
+        rest_sum_ankle_left[0] += movements[index][2][0]  # Left ankle X
+        rest_sum_ankle_left[1] += movements[index][2][1]  # Left ankle Y
+        rest_sum_ankle_left[2] += movements[index][2][2]  # Left ankle Z
+        
+        rest_sum_ankle_right[0] += movements[index][3][0]  # Right ankle X
+        rest_sum_ankle_right[1] += movements[index][3][1]  # Right ankle Y
+        rest_sum_ankle_right[2] += movements[index][3][2]  # Right ankle Z
+
         rest_count += 1
-
-        # If we have enough frames of rest, store the average position
-        if rest_counter >= frameDifference:
-            average_rest_position = [rest_sum[0] / rest_count, rest_sum[1] / rest_count, rest_sum[2] / rest_count]
-            rest_positions.append(average_rest_position)
-            rest_counter = 0  # Reset counter
-            rest_sum = [0, 0, 0]  # Reset accumulated sum
-            rest_count = 0  # Reset count for averaging
     else:
-        # If movement is detected, store the current positions (this is the new movement)
-        newMovements.append(movements[index])
+        # If a rest interval ended (movement exceeds the threshold), calculate the average and store it
+        if rest_count > 0:
+            # Calculate the average for each landmark
+            average_rest_wrist_left = [rest_sum_wrist_left[0] / rest_count, 
+                                       rest_sum_wrist_left[1] / rest_count, 
+                                       rest_sum_wrist_left[2] / rest_count]
+            
+            average_rest_wrist_right = [rest_sum_wrist_right[0] / rest_count, 
+                                        rest_sum_wrist_right[1] / rest_count, 
+                                        rest_sum_wrist_right[2] / rest_count]
+            
+            average_rest_ankle_left = [rest_sum_ankle_left[0] / rest_count, 
+                                       rest_sum_ankle_left[1] / rest_count, 
+                                       rest_sum_ankle_left[2] / rest_count]
+            
+            average_rest_ankle_right = [rest_sum_ankle_right[0] / rest_count, 
+                                        rest_sum_ankle_right[1] / rest_count, 
+                                        rest_sum_ankle_right[2] / rest_count]
 
-# After the loop ends, if there are any remaining rest positions, append them
-if rest_counter > 0:
-    average_rest_position = [rest_sum[0] / rest_count, rest_sum[1] / rest_count, rest_sum[2] / rest_count]
-    rest_positions.append(average_rest_position)
+            # Store the average positions for the rest period
+            restPositions.append({
+                'left_wrist': average_rest_wrist_left,
+                'right_wrist': average_rest_wrist_right,
+                'left_ankle': average_rest_ankle_left,
+                'right_ankle': average_rest_ankle_right
+            })
+            
+            # Reset rest accumulation variables for the next interval
+            rest_sum_wrist_left = [0, 0, 0]
+            rest_sum_wrist_right = [0, 0, 0]
+            rest_sum_ankle_left = [0, 0, 0]
+            rest_sum_ankle_right = [0, 0, 0]
+            rest_count = 0
 
-# Print the new movements and the rest positions
-print("New Movements:")
-print(newMovements)
+# If there's an ongoing rest period at the end of the loop, store the average position
+if rest_count > 0:
+    average_rest_wrist_left = [rest_sum_wrist_left[0] / rest_count, 
+                               rest_sum_wrist_left[1] / rest_count, 
+                               rest_sum_wrist_left[2] / rest_count]
+    
+    average_rest_wrist_right = [rest_sum_wrist_right[0] / rest_count, 
+                                rest_sum_wrist_right[1] / rest_count, 
+                                rest_sum_wrist_right[2] / rest_count]
+    
+    average_rest_ankle_left = [rest_sum_ankle_left[0] / rest_count, 
+                               rest_sum_ankle_left[1] / rest_count, 
+                               rest_sum_ankle_left[2] / rest_count]
+    
+    average_rest_ankle_right = [rest_sum_ankle_right[0] / rest_count, 
+                                rest_sum_ankle_right[1] / rest_count, 
+                                rest_sum_ankle_right[2] / rest_count]
+    
+    # Store the final average positions for the rest period
+    restPositions.append({
+        'left_wrist': average_rest_wrist_left,
+        'right_wrist': average_rest_wrist_right,
+        'left_ankle': average_rest_ankle_left,
+        'right_ankle': average_rest_ankle_right
+    })
 
+# Print the rest positions
 print("Rest Positions:")
-print(rest_positions)
+print(len(restPositions))
