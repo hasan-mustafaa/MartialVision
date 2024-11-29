@@ -1,6 +1,6 @@
 # MartialVision
 
-An AI-powered platform designed to enhance martial arts practice by analyzing and grading movements. The system uses computer vision to compare a user's performance with tutorial videos and provides detailed feedback to help them master their skills.
+It's a platform designed to enhance martial arts practice by analyzing and grading movements. The system uses computer vision to compare a user's performance with tutorial videos and provides detailed feedback to help them master their skills.
 
 ## Key Features:
 
