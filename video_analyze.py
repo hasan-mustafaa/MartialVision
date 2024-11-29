@@ -26,7 +26,7 @@ def detect_rest_positions(video_file):
     frameDifference = 11  # Number of frames to check for minimal movement (this can be adjusted)
 
     restPositions = []
-    restPositions.append({'left_wrist': 0, 'right_wrist': 0})
+    restPositions.append({'left_wrist': [0, 0, 0], 'right_wrist': [0, 0, 0]})
 
     # Initialize variables to track resting state for each wrist
     rest_sum_wrist_left = [0, 0, 0]  # To accumulate position values during rest for left wrist
