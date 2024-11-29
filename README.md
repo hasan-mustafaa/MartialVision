@@ -13,8 +13,7 @@ It's a platform designed to enhance martial arts practice by analyzing and gradi
  - Splices videos into comparable sections for accurate grading.
  - Scores performance based on posture, precision, and timing.
 ### Cumulative Scoring and Feedback
- - Provides segment-wise scores and a final cumulative score.
- - Highlights areas of improvement using visual feedback (e.g., heatmaps, overlays).
+ - Highlights areas of improvement using feedback.
 
 ## How It Works
 ### Step 1: Choose a Tutorial
@@ -25,7 +24,4 @@ It's a platform designed to enhance martial arts practice by analyzing and gradi
  - OpenCV tracks body motion and compares it with the tutorial video.
  - Identifies deviations in joint angles, timing, and accuracy.
 ### Step 4: Get Your Score
- - Receive a detailed breakdown of your performance:
- - Segment scores (e.g., footwork, punches, kicks).
- - Cumulative overall score.
  - Suggestions for improvement are displayed.
