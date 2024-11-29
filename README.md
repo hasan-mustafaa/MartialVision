@@ -4,11 +4,13 @@ It's a platform designed to enhance martial arts practice by analyzing and gradi
 
 ## Key Features:
 
+### Unlimited Capabilities:
+ - Users can upload any video demonstrating any form of martial art.
 ### Tutorial Playback: 
  - Plays segmented videos of martial arts movements for users to follow.
 ### User Video Capture:
  - Records the user's performance of the selected martial arts section.
-### AI-Powered Grading
+### AI-Powered Grading:
  - Uses OpenCV to analyze and compare the user's movements with the tutorial.
  - Splices videos into comparable sections for accurate grading.
  - Scores performance based on posture, precision, and timing.
