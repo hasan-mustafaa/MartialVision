@@ -19,7 +19,7 @@ It's a platform designed to enhance martial arts practice by analyzing and gradi
 
 ## How It Works
 ### Step 1: Choose a Tutorial
- - Select a specific martial arts technique or movement to practice.
+ - Upload a specific martial arts technique or movement to practice.
 ### Step 2: Record Performance
  - Perform the action while the system records your movements via webcam or phone camera.
 ### Step 3: AI Analysis
